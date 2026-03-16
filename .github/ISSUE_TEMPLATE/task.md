@@ -3,12 +3,21 @@ name: Task
 about: Development task
 ---
 
-### Task
+## Description
 
-Describe the task.
+Explain the task.
 
-### Checklist
+## Requirements
 
-- [ ] Implementation
-- [ ] Test
-- [ ] Documentation
+- requirement 1
+- requirement 2
+
+## Acceptance Criteria
+
+- [ ] Implementation complete
+- [ ] Tested
+- [ ] Code committed
+
+## Related Epic
+
+Epic: 
