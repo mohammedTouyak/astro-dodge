@@ -36,11 +36,13 @@ The player controls a spaceship that must dodge incoming asteroids while achievi
 ---
 
 ## 📂 Project Structure
-Assets/
-Scripts/
-Prefabs/
-Scenes/
-UI/
+Assets/_Project/
+- Scripts
+- Prefabs
+- Scenes
+- Art
+- UI
+- Audio
 
 
 ---
