@@ -10,6 +10,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float minY = -4f;
     [SerializeField] private float maxY = 4f;
 
+    private SpriteRenderer spriteRenderer;
+    private BoxCollider2D boxCollider2D;
+
+    private bool isAlive = true;
+
+    private void Awake()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        boxCollider2D = GetComponent<BoxCollider2D>();
+    }
+
     private void Start()
     {
         Debug.Log("PlayerController attached and ready.");
@@ -17,18 +28,27 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        float verticalInput = Input.GetAxisRaw("Vertical");
+        if (isAlive)
+        {
+            float horizontalInput = Input.GetAxisRaw("Horizontal");
+            float verticalInput = Input.GetAxisRaw("Vertical");
 
-        // Sans .normalized, en diagonale, le joueur irait plus vite.
+            // Sans .normalized, en diagonale, le joueur irait plus vite.
 
-        /* #Parce que le vecteur (1, 1) est plus long que (1, 0).
-        .normalized corrige ça et garde la même vitesse dans toutes les directions. */
-        Vector2 movementDirection = new Vector2(horizontalInput, verticalInput).normalized;
+            // Parce que le vecteur (1, 1) est plus long que (1, 0),
+            // .normalized garde la même vitesse dans toutes les directions.
+            Vector2 movementDirection = new Vector2(horizontalInput, verticalInput).normalized;
 
-        transform.Translate(movementDirection * moveSpeed * Time.deltaTime);
+            transform.Translate(movementDirection * moveSpeed * Time.deltaTime);
 
-        ClampPosition();
+            ClampPosition();
+        }
+
+        if (!isAlive && Input.GetKeyDown(KeyCode.R))
+        {
+            RespawnPlayer();
+        }
+
     }
 
     private void ClampPosition()
@@ -37,5 +57,35 @@ public class PlayerController : MonoBehaviour
         float clampedY = Mathf.Clamp(transform.position.y, minY, maxY);
 
         transform.position = new Vector3(clampedX, clampedY, transform.position.z);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            Debug.Log("Player collided with an enemy!");
+
+            // gameObject.SetActive(false); // Ça désactive le Player lorsqu’il touche l’ennemi. Donc visuellement, le Player disparaît. + update()ne plus execute.
+
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        isAlive = false;
+        spriteRenderer.enabled = false;
+        boxCollider2D.enabled = false;
+    }
+
+    private void RespawnPlayer()
+    {
+        isAlive = true;
+        spriteRenderer.enabled = true;
+        boxCollider2D.enabled = true;
+
+        transform.position = new Vector3(0f, -3.5f, 0f);
+
+        Debug.Log("Player respawned.");
     }
 }
