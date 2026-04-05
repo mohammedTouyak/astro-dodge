@@ -1,5 +1,7 @@
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))] // Instead of only checking ( Null Safety Checks )… you can ENFORCE components automatically
+[RequireComponent(typeof(BoxCollider2D))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
@@ -13,12 +15,28 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D boxCollider2D;
 
+    private Vector3 spawnPosition;
+
+
     private bool isAlive = true;
 
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         boxCollider2D = GetComponent<BoxCollider2D>();
+
+        // ✅ Null Safety Checks
+        if (spriteRenderer == null)
+        {
+            Debug.LogError("SpriteRenderer is missing on Player!");
+        }
+
+        if (boxCollider2D == null)
+        {
+            Debug.LogError("BoxCollider2D is missing on Player!");
+        }
+
+        spawnPosition = transform.position;
     }
 
     private void Start()
@@ -74,18 +92,27 @@ public class PlayerController : MonoBehaviour
     private void Die()
     {
         isAlive = false;
-        spriteRenderer.enabled = false;
-        boxCollider2D.enabled = false;
+
+        if (spriteRenderer != null)
+            spriteRenderer.enabled = false;
+
+        if (boxCollider2D != null)
+            boxCollider2D.enabled = false;
     }
 
     private void RespawnPlayer()
     {
         isAlive = true;
-        spriteRenderer.enabled = true;
-        boxCollider2D.enabled = true;
 
-        transform.position = new Vector3(0f, -3.5f, 0f);
+        if (spriteRenderer != null)
+            spriteRenderer.enabled = true;
+
+        if (boxCollider2D != null)
+            boxCollider2D.enabled = true;
+
+        transform.position = spawnPosition;
 
         Debug.Log("Player respawned.");
     }
+
 }
