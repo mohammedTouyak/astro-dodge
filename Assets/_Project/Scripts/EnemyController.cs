@@ -15,9 +15,15 @@ public class EnemyController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        MoveDown();
+    }
+
+    private void MoveDown()
+    {
+        // Vector2.down: Means direction (0, -1)
+        transform.Translate(Vector2.down * moveSpeed * Time.deltaTime);
     }
     
 }
