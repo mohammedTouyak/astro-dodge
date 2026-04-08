@@ -13,18 +13,20 @@ public class EnemySpawner : MonoBehaviour
     [Header("Spawn Timing")]
     [SerializeField] private float spawnInterval = 2f; // This defines how often an asteroid should spawn. 2f means every 2 seconds
 
-    private void Start()
-    {
-        SpawnAsteroid();
-    }
-
-    private void SpawnAsteroid()
+   private void Start()
     {
         if (asteroidPrefab == null)
         {
             Debug.LogWarning("EnemySpawner: Asteroid Prefab is not assigned.");
             return;
         }
+
+        InvokeRepeating(nameof(SpawnAsteroid), 0f, spawnInterval);
+    }
+
+
+    private void SpawnAsteroid()
+    {
 
         float spawnX = Random.Range(minSpawnX, maxSpawnX);
         Vector3 spawnPosition = new Vector3(spawnX, spawnY, 0f);
