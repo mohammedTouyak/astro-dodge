@@ -18,12 +18,21 @@ public class EnemyController : MonoBehaviour
     private void Update()
     {
         MoveDown();
+        DestroyIfOffScreen();
     }
 
     private void MoveDown()
     {
         // Vector2.down: Means direction (0, -1)
         transform.Translate(Vector2.down * moveSpeed * Time.deltaTime);
+    }
+
+    private void DestroyIfOffScreen()
+    {
+        if (transform.position.y < destroyY)
+        {
+            Destroy(gameObject);
+        }
     }
     
 }
