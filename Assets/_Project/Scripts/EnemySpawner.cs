@@ -26,7 +26,9 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
 
-        Vector3 spawnPosition = new Vector3(0f, spawnY, 0f);
+        float spawnX = Random.Range(minSpawnX, maxSpawnX);
+        Vector3 spawnPosition = new Vector3(spawnX, spawnY, 0f);
+        
         Instantiate(asteroidPrefab, spawnPosition, Quaternion.identity); // This creates a copy of the prefab in the scene.
                                                                         // - asteroidPrefab = what to spawn
                                                                         // - spawnPosition = where to spawn it
