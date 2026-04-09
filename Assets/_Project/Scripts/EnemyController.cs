@@ -1,0 +1,38 @@
+using UnityEngine;
+
+public class EnemyController : MonoBehaviour
+{
+
+    [Header("Movement Settings")]
+    [SerializeField] private float moveSpeed = 3f;
+
+    [Header("Lifecycle Settings")]
+    [SerializeField] private float destroyY = -6f;
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
+        MoveDown();
+        DestroyIfOffScreen();
+    }
+
+    private void MoveDown()
+    {
+        // Vector2.down: Means direction (0, -1)
+        transform.Translate(Vector2.down * moveSpeed * Time.deltaTime);
+    }
+
+    private void DestroyIfOffScreen()
+    {
+        if (transform.position.y < destroyY)
+        {
+            Destroy(gameObject);
+        }
+    }
+    
+}
