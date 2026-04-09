@@ -4,6 +4,7 @@ public class ScoreManager : MonoBehaviour
 {
     [Header("Score Settings")]
     [SerializeField] private float currentScore = 0f; // why float ? Because later score may increase using time.
+    [SerializeField] private float scoreRate = 10f;
 
     public float CurrentScore => currentScore;
 
@@ -12,9 +13,13 @@ public class ScoreManager : MonoBehaviour
         currentScore = 0f;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        IncreaseScoreOverTime();
+    }
+
+    private void IncreaseScoreOverTime()
+    {
+        currentScore += scoreRate * Time.deltaTime;
     }
 }
