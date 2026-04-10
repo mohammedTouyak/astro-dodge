@@ -10,6 +10,9 @@ public class ScoreManager : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI scoreText;
 
+    [Header("Gameplay References")]
+    [SerializeField] private PlayerController playerController;
+
     public float CurrentScore => currentScore;
 
     private void Start()
@@ -20,8 +23,21 @@ public class ScoreManager : MonoBehaviour
 
     private void Update()
     {
-        IncreaseScoreOverTime();
+        if (CanIncreaseScore())
+        {
+            IncreaseScoreOverTime();
+        }
         UpdateScoreUI();
+    }
+
+    private bool CanIncreaseScore()
+    {
+        if (playerController == null)
+        {
+            return false;
+        }
+
+        return playerController.IsAlive;
     }
 
     private void IncreaseScoreOverTime()

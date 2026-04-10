@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
 
 
     private bool isAlive = true;
+    public bool IsAlive => isAlive;
 
     private void Awake()
     {
