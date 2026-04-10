@@ -4,19 +4,20 @@ using UnityEngine;
 public class ScoreManager : MonoBehaviour
 {
     private const string BestScoreKey = "BestScore";
+
     [Header("Score Settings")]
-    [SerializeField] private float currentScore = 0f; // why float ? Because later score may increase using time.
+    [SerializeField] private float currentScore = 0f;// why float ? Because later score may increase using time.
     [SerializeField] private float bestScore = 0f;
     [SerializeField] private float scoreRate = 10f;
 
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI bestScoreText;
 
     [Header("Gameplay References")]
     [SerializeField] private PlayerController playerController;
 
     private bool hasSavedBestScore = false;
-
 
     public float CurrentScore => currentScore;
     public float BestScore => bestScore;
@@ -27,6 +28,7 @@ public class ScoreManager : MonoBehaviour
         // PlayerPrefs.DeleteKey(BestScoreKey);
         LoadBestScore();
         UpdateScoreUI();
+        UpdateBestScoreUI();
     }
 
     private void Update()
@@ -41,6 +43,7 @@ public class ScoreManager : MonoBehaviour
         }
 
         UpdateScoreUI();
+        UpdateBestScoreUI();
     }
 
     private bool CanIncreaseScore()
@@ -88,5 +91,15 @@ public class ScoreManager : MonoBehaviour
         }
 
         scoreText.text = "SCORE: " + Mathf.FloorToInt(currentScore);
+    }
+
+    private void UpdateBestScoreUI()
+    {
+        if (bestScoreText == null)
+        {
+            return;
+        }
+
+        bestScoreText.text = "BEST: " + Mathf.FloorToInt(bestScore);
     }
 }
