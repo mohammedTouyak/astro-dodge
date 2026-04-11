@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Game Over triggered.");
     }
 
-    private void RestartGame()
+    public void RestartGame()
     {
         Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.buildIndex);
