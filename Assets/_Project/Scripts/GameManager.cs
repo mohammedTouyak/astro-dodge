@@ -6,9 +6,17 @@ public class GameManager : MonoBehaviour
 
     public bool IsGameOver => isGameOver;
 
-    private void Start()
+    private void Update()
     {
-        isGameOver = false;
+        if (!isGameOver)
+        {
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            RestartGame();
+        }
     }
 
     public void TriggerGameOver()
@@ -20,5 +28,10 @@ public class GameManager : MonoBehaviour
 
         isGameOver = true;
         Debug.Log("Game Over triggered.");
+    }
+
+    private void RestartGame()
+    {
+        Debug.Log("Restart requested.");
     }
 }
