@@ -16,10 +16,6 @@ public class PlayerController : MonoBehaviour
     private BoxCollider2D boxCollider2D;
     private GameManager gameManager;
 
-
-    private Vector3 spawnPosition;
-
-
     private bool isAlive = true;
     public bool IsAlive => isAlive;
 
@@ -40,8 +36,6 @@ public class PlayerController : MonoBehaviour
         {
             Debug.LogError("BoxCollider2D is missing on Player!");
         }
-
-        spawnPosition = transform.position;
 
         if (gameManager == null)
         {
