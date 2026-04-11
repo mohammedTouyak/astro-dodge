@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement; //This gives access to scene loading functions.
 
 public class GameManager : MonoBehaviour
 {
@@ -32,6 +33,7 @@ public class GameManager : MonoBehaviour
 
     private void RestartGame()
     {
-        Debug.Log("Restart requested.");
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.buildIndex);
     }
 }
