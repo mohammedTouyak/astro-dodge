@@ -17,6 +17,17 @@ public class EnemySpawner : MonoBehaviour
 
     private float currentSpawnInterval;
     private float spawnTimer;
+    private GameManager gameManager;
+
+    private void Awake()
+    {
+        gameManager = FindFirstObjectByType<GameManager>();
+
+        if (gameManager == null)
+        {
+            Debug.LogError("GameManager not found in scene!");
+        }
+    }
 
    private void Start()
     {
@@ -34,6 +45,11 @@ public class EnemySpawner : MonoBehaviour
 
     private void Update()
     {
+        if (gameManager != null && gameManager.IsGameOver)
+        {
+            return;
+        }
+
         HandleSpawning();
         IncreaseDifficulty();
     }

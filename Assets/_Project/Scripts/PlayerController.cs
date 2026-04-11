@@ -14,16 +14,21 @@ public class PlayerController : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D boxCollider2D;
+    private GameManager gameManager;
+
 
     private Vector3 spawnPosition;
 
 
     private bool isAlive = true;
+    public bool IsAlive => isAlive;
+
 
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         boxCollider2D = GetComponent<BoxCollider2D>();
+        gameManager = FindFirstObjectByType<GameManager>();
 
         // ✅ Null Safety Checks
         if (spriteRenderer == null)
@@ -37,6 +42,11 @@ public class PlayerController : MonoBehaviour
         }
 
         spawnPosition = transform.position;
+
+        if (gameManager == null)
+        {
+            Debug.LogError("GameManager not found in scene!");
+        }
     }
 
     private void Start()
@@ -79,6 +89,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (!isAlive)
+        {
+            return;
+        }
         if (other.CompareTag("Enemy"))
         {
             Debug.Log("Player collided with an enemy!");
@@ -98,6 +112,9 @@ public class PlayerController : MonoBehaviour
 
         if (boxCollider2D != null)
             boxCollider2D.enabled = false;
+        
+        if (gameManager != null)
+            gameManager.TriggerGameOver();
     }
 
     private void RespawnPlayer()
