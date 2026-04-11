@@ -72,11 +72,6 @@ public class PlayerController : MonoBehaviour
             ClampPosition();
         }
 
-        if (!isAlive && Input.GetKeyDown(KeyCode.R))
-        {
-            RespawnPlayer();
-        }
-
     }
 
     private void ClampPosition()
@@ -111,21 +106,6 @@ public class PlayerController : MonoBehaviour
         
         if (gameManager != null)
             gameManager.TriggerGameOver();
-    }
-
-    private void RespawnPlayer()
-    {
-        isAlive = true;
-
-        if (spriteRenderer != null)
-            spriteRenderer.enabled = true;
-
-        if (boxCollider2D != null)
-            boxCollider2D.enabled = true;
-
-        transform.position = spawnPosition;
-
-        Debug.Log("Player respawned.");
     }
 
 }
