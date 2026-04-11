@@ -6,7 +6,7 @@ public class ScoreManager : MonoBehaviour
     private const string BestScoreKey = "BestScore";
 
     [Header("Score Settings")]
-    [SerializeField] private float currentScore = 0f;// why float ? Because later score may increase using time.
+    [SerializeField] private float currentScore = 0f;
     [SerializeField] private float bestScore = 0f;
     [SerializeField] private float scoreRate = 10f;
 
@@ -14,18 +14,25 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI bestScoreText;
 
-    [Header("Gameplay References")]
-    [SerializeField] private PlayerController playerController;
-
+    private GameManager gameManager;
     private bool hasSavedBestScore = false;
 
     public float CurrentScore => currentScore;
     public float BestScore => bestScore;
 
+    private void Awake()
+    {
+        gameManager = FindFirstObjectByType<GameManager>();
+
+        if (gameManager == null)
+        {
+            Debug.LogError("GameManager not found in scene!");
+        }
+    }
+
     private void Start()
     {
         currentScore = 0f;
-        // PlayerPrefs.DeleteKey(BestScoreKey);
         LoadBestScore();
         UpdateScoreUI();
         UpdateBestScoreUI();
@@ -33,27 +40,15 @@ public class ScoreManager : MonoBehaviour
 
     private void Update()
     {
-        if (CanIncreaseScore())
-        {
-            IncreaseScoreOverTime();
-        }
-        else
+        if (gameManager != null && gameManager.IsGameOver)
         {
             SaveBestScoreIfNeeded();
+            return;
         }
 
+        IncreaseScoreOverTime();
         UpdateScoreUI();
         UpdateBestScoreUI();
-    }
-
-    private bool CanIncreaseScore()
-    {
-        if (playerController == null)
-        {
-            return false;
-        }
-
-        return playerController.IsAlive;
     }
 
     private void IncreaseScoreOverTime()
@@ -80,6 +75,7 @@ public class ScoreManager : MonoBehaviour
             PlayerPrefs.Save();
         }
 
+        UpdateBestScoreUI();
         hasSavedBestScore = true;
     }
 

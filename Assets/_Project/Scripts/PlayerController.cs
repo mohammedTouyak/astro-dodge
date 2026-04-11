@@ -89,6 +89,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (!isAlive)
+        {
+            return;
+        }
         if (other.CompareTag("Enemy"))
         {
             Debug.Log("Player collided with an enemy!");
