@@ -1,11 +1,14 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
 public class GameOverUI : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private TextMeshProUGUI finalScoreText;
     [SerializeField] private TextMeshProUGUI bestScoreResultText;
+    [SerializeField] private float fadeDuration = 0.4f;
 
     private GameManager gameManager;
     private ScoreManager scoreManager;
@@ -31,6 +34,11 @@ public class GameOverUI : MonoBehaviour
             Debug.LogError("Game Over Panel is not assigned!");
         }
 
+        if (canvasGroup == null)
+        {
+            Debug.LogError("CanvasGroup is not assigned!");
+        }
+
         if (finalScoreText == null)
         {
             Debug.LogError("Final Score Text is not assigned!");
@@ -46,7 +54,14 @@ public class GameOverUI : MonoBehaviour
     {
         if (gameOverPanel != null)
         {
-            gameOverPanel.SetActive(false);
+            gameOverPanel.SetActive(true);
+        }
+
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = 0f;
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
         }
     }
 
@@ -60,7 +75,8 @@ public class GameOverUI : MonoBehaviour
         if (gameManager != null && gameManager.IsGameOver)
         {
             UpdateScoreTexts();
-            ShowGameOverUI();
+            StartCoroutine(FadeInGameOverUI());
+            hasShownGameOver = true;
         }
     }
 
@@ -71,25 +87,41 @@ public class GameOverUI : MonoBehaviour
             return;
         }
 
-        if (finalScoreText != null)
-        {
-            finalScoreText.text = "FINAL SCORE: " + Mathf.FloorToInt(scoreManager.CurrentScore);
-        }
-
-        if (bestScoreResultText != null)
-        {
-            bestScoreResultText.text = "BEST SCORE: " + Mathf.FloorToInt(scoreManager.BestScore);
-        }
+        finalScoreText.text = "FINAL SCORE: " + Mathf.FloorToInt(scoreManager.CurrentScore);
+        bestScoreResultText.text = "BEST SCORE: " + Mathf.FloorToInt(scoreManager.BestScore);
     }
 
-
-    private void ShowGameOverUI()
+    private IEnumerator FadeInGameOverUI()
     {
-        if (gameOverPanel != null)
+        float elapsedTime = 0f;
+
+        while (elapsedTime < fadeDuration)
         {
-            gameOverPanel.SetActive(true);
+            elapsedTime += Time.deltaTime;
+            canvasGroup.alpha = Mathf.Clamp01(elapsedTime / fadeDuration);
+            yield return null;
         }
 
-        hasShownGameOver = true;
+        canvasGroup.alpha = 1f;
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
+    }
+
+    public IEnumerator FadeOutUI()
+    {
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
+
+        float elapsedTime = 0f;
+        float startAlpha = canvasGroup.alpha;
+
+        while (elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            canvasGroup.alpha = Mathf.Lerp(startAlpha, 0f, elapsedTime / fadeDuration);
+            yield return null;
+        }
+
+        canvasGroup.alpha = 0f;
     }
 }
