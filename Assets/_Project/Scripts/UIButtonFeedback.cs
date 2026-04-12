@@ -1,0 +1,35 @@
+using UnityEngine;
+using UnityEngine.EventSystems;
+
+public class UIButtonFeedback : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+{
+    private Vector3 originalScale;
+
+    [SerializeField] private float hoverScale = 1.1f;
+    [SerializeField] private float pressedScale = 0.95f;
+
+    private void Start()
+    {
+        originalScale = transform.localScale;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        transform.localScale = originalScale * hoverScale;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        transform.localScale = originalScale;
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        transform.localScale = originalScale * pressedScale;
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        transform.localScale = originalScale * hoverScale;
+    }
+}
